@@ -1,6 +1,6 @@
-# @commit-message-formatter
+# commit-message-formatter
 
-The `@commit-message-formatter` library is designed to format commit messages based on predefined patterns and task IDs extracted from branch names. 
+The `commit-message-formatter` library is designed to format commit messages based on predefined patterns and task IDs extracted from branch names. 
 It ensures that commit messages are consistent and informative, making it easier to track changes and understand the context of each commit. 
 This library is particularly useful when used in conjunction with `husky` for Git hooks and optionally with `commitlint` for linting commit messages.
 
@@ -9,7 +9,7 @@ To install the commit message formatter, follow these steps:
 
 1. Install the required packages:
 ```sh
-npm install @commit-message-formatter husky @commitlint/config-conventional @commitlint/cli --save-dev
+npm install commit-message-formatter husky @commitlint/config-conventional @commitlint/cli --save-dev
 ```
 
 2. Initialize Husky in your project:
@@ -32,7 +32,7 @@ npx husky
 
 ## Configuration
 
-The `@commit-message-formatter` can be configured using a configuration file. The following configuration file formats are supported:
+The `commit-message-formatter` can be configured using a configuration file. The following configuration file formats are supported:
 
 - `package.json`
 - `commit-message-formatter.json`
@@ -50,7 +50,7 @@ Here is an example configuration file:
 
 ```javascript
 // .commit-message-formatterrc.js
-/** @type {import('@commit-message-formatter/src/types.ts').ISettingsConfig} */
+/** @type {import('commit-message-formatter/src/types.ts').ISettingsConfig} */
 module.exports = {
   messagePattern: '[$T] $M',
   taskManager: 'jira',
@@ -157,48 +157,3 @@ module.exports = {
 }
 ```
 
-## Recipes
-
-### Using `@commit-message-formatter` with `husky` and `commitlint` 
-
-The `@commit-message-formatter` package works best with `husky` and `commitlint` to ensure consistent and conventional commit messages.
-
-#### Step-by-step guide
-
-After installing and configuring `@commit-message-formatter`, follow these steps to integrate it with `husky` and `commitlint`.
-
-1. Install husky and commitlint:
-
-```
-npm install husky @commitlint/config-conventional @commitlint/cli --save-dev
-```
-
-2. Configuration commitlint:
-
-```
-echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
-```
-
-2. Initialize husky:
-
-```
-npx husky install
-```
-
-This command will create a .husky directory in the root of your project.
-
-3. Create pre-commits:
- - create a `commit-msg` and `prepare-commit-msg` in the `.husky` directory
- - create a `commit-msg` and `prepare-commit-msg` in the `.husky` directory
- - add `npx commit-message-formatter "$1"` in `commit-msg`
- - add `npx --no-install commitlint --edit` in `prepare-commit-msg`
-
-4. Make a Commit
-
-Now, when you create a commit, Husky will invoke the commit-message-formatter script, which will format the commit message according to your configuration.
-
-```git
-git commit -m "chore: some changes"
-```
-
-By integrating `commit-message-formatte`r with `husky` and `commitlint`, you can maintain a consistent and professional commit history, making it easier for your team to understand and review changes.

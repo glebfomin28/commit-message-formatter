@@ -25,7 +25,7 @@
   "scripts": {
     "formatter": "esno src/script.ts",
     "test": "jest"
-},
+  },
   "bin": {
     "commit-message-formatter": "src/script.ts"
   },
