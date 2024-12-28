@@ -8,27 +8,38 @@ This library is particularly useful when used in conjunction with `husky` for Gi
 To install the commit message formatter, follow these steps:
 
 1. Install the required packages:
-```sh
-npm install commit-message-formatter husky @commitlint/config-conventional @commitlint/cli --save-dev
-```
+    ```sh
+    npm install commit-message-formatter husky @commitlint/config-conventional @commitlint/cli --save-dev
+    ```
 
 2. Initialize Husky in your project:
-```sh
-npx husky
-```
+    ```sh
+    npx husky
+    ```
  
 3. Configure commitlint to use conventional config
-- create `.commitlintrc.cjs`
-- add `module.exports = { extends: ['@commitlint/config-conventional'] };`
+
+    Create a file named `.commitlintrc.cjs` in the root directory of your project and add the following content:
+    ```javascript
+    module.exports = { 
+      extends: ['@commitlint/config-conventional'] 
+    };
+    ```
 
 4. Add a commit message hook to format the commit message:
 
 - Create a file named `commit-msg` in the `.husky` directory. 
-- Add the following content to the commit-msg file: `npx commit-message-formatter $1`
+- Add the following content to the commit-msg file: 
+    ```
+    npx commit-message-formatter $1
+    ```
 
 5. Add a prepare commit message hook to lint the commit message:
 - Create a file named `prepare-commit-msg` in the `.husky` directory.
-- Add the following content to the prepare-commit-msg file: `npx --no-install commitlint --edit`
+- Add the following content to the prepare-commit-msg file: 
+    ```
+    npx --no-install commitlint --edit
+    ```
 
 ## Configuration
 
