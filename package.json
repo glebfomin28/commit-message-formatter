@@ -1,5 +1,5 @@
 {
-  "name": "commit-msg-formatter",
+  "name": "commit-message-formatter",
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
@@ -16,12 +16,12 @@
   "description": "A tool to format commit messages based on specified patterns.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/glebfomin28/commit-msg-formatter.git"
+    "url": "git+https://github.com/glebfomin28/commit-message-formatter.git"
   },
   "bugs": {
-    "url": "https://github.com/glebfomin28/commit-msg-formatter/issues"
+    "url": "https://github.com/glebfomin28/commit-message-formatter/issues"
   },
-  "homepage": "https://github.com/glebfomin28/commit-msg-formatter#readme",
+  "homepage": "https://github.com/glebfomin28/commit-message-formatter#readme",
   "scripts": {
     "formatter": "esno src/script.ts",
     "test": "jest"
