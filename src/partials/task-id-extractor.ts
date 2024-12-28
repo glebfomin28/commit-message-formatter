@@ -3,14 +3,12 @@ import { ticketRegexConfig } from "../config";
 import { createRegExp } from "./utilities";
 
 export class TaskIdExtractor {
-  /** Статический метод для нормализации списка taskManager */
   private normalizeTaskManagerList(taskManager?: TTaskManagerConfig): Array<TTaskManagerItem> {
     return Array.isArray(taskManager)
       ? taskManager
       : [taskManager].filter(Boolean) as Array<TTaskManagerItem>;
   }
 
-  /** Метод для получения списка регулярных выражений для трекеров */
   private getCurrentPatternList(taskManagerList: Array<TTaskManagerItem>): Array<RegExp> {
     const regExpList: Array<RegExp> = [];
 
@@ -25,7 +23,6 @@ export class TaskIdExtractor {
     return regExpList;
   }
 
-  /** Метод для извлечения трекера из имени ветки */
   public extract(branchName: string, taskManager?: TTaskManagerConfig): string | null {
     const taskManagerList = this.normalizeTaskManagerList(taskManager);
 

@@ -32,7 +32,7 @@ class PatternFormatter {
 
     return tCount === 1 && mCount === 1;
   }
-  /** Метод для замены шаблонов в строке формата */
+
   private replacePlaceholders(): string {
     if (this.hasContainTaskId() || !this.hasValidPlaceholders()) {
       return this.commitMessage;
@@ -44,7 +44,6 @@ class PatternFormatter {
       .trim();
   }
 
-  /** helpers for formatInScope if message have scope. (feat(shared): some message) */
   private formattedWithScope(scopeContent: string): string {
     const typeMatch = this.commitMessage.match(formatScopeRegexConfig.SCOPE_TYPE);
     const subjectMatch = this.commitMessage.match(formatScopeRegexConfig.SCOPE_SUBJECT);
@@ -56,7 +55,6 @@ class PatternFormatter {
     return `${type}(${this.taskId}/${scopeContent})${subject}`;
   };
 
-  /** helpers for formatInScope if message don`t have scope. (feat: some message) */
   private formattedWithoutScope(): string {
     const type = this.commitMessage.replace(formatScopeRegexConfig.NO_SCOPE_TYPE, '').trim();
     const subject = this.commitMessage.replace(formatScopeRegexConfig.NO_SCOPE_SUBJECT, '').trim();
@@ -69,7 +67,6 @@ class PatternFormatter {
     return `${type}(${this.taskId}): ${subject}`;
   };
 
-  /** formatted "in-scope" */
   private formatInScope(): string {
     if (this.hasContainTaskId()) {
       return this.commitMessage;

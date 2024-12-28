@@ -24,7 +24,3 @@ export interface ISettingsConfig {
     ignoredBranchesPattern?: string;
     isRequiredTaskIdInBranches?: boolean;
 }
-
-// export type TTrackerPatterns = Array<TTracker | ITicketCustom>;
-//
-// export type TTicketRegexConfig = Record<TTracker, RegExp>

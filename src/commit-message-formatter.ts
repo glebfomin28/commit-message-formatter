@@ -18,7 +18,6 @@ class CommitMessageFormatter {
     }
   }
 
-  /** Метод для загрузки конфигурации */
   private async loadConfig(): Promise<ISettingsConfig> {
     const config = defaultSettingsConfig;
     const projectRoot = process.cwd();
@@ -36,7 +35,6 @@ class CommitMessageFormatter {
     return config;
   }
 
-  /** Метод для получения имени текущей ветки */
   private getBranchName(): string {
     try {
       return execSync('git rev-parse --abbrev-ref HEAD')
@@ -48,7 +46,6 @@ class CommitMessageFormatter {
     }
   }
 
-  /** Метод для получения текста коммита */
   private getCommitMessage(): string {
     try {
       return readFileSync(this.commitMessageFilePath, 'utf-8');
@@ -58,20 +55,17 @@ class CommitMessageFormatter {
     }
   }
 
-  /** Проверка, содержит ли commitMessage в игноре */
   private hasCommitMessageIgnored(commitMessage: string, ignoredMessagePattern?: string): boolean {
     return ignoredMessagePattern
       ? createRegExp(ignoredMessagePattern, 'i').test(commitMessage)
       : false;
   };
 
-  /** Валидация commitMessage */
   private hasValidCommitMessage(commitMessage: string, messagePattern?: TMessagePatternConfig): boolean{
     const validate = (messagePattern && validateRegexConfig[messagePattern]) || validateRegexConfig.default;
     return validate.test(commitMessage.toLowerCase());
   }
 
-  /** Проверка, содержит ли ветка в taskId */
   private hasBranchContainTaskId(
     branchName: string,
     taskId?: string | null,
@@ -85,31 +79,22 @@ class CommitMessageFormatter {
   }
 
   public async runCommitProcessing(): Promise<void> {
-    console.log('SCRIPT START');
 
     const config = await this.loadConfig();
     const commitMessage = this.getCommitMessage();
     const branchName = this.getBranchName();
-     const currentTaskId = extractTaskId(branchName, config?.taskManager);
+    const currentTaskId = extractTaskId(branchName, config?.taskManager);
 
-    console.log("config", config);
-    console.log("commitMessage", commitMessage);
-    console.log("branchName", branchName);
-    console.log("currentTaskId", currentTaskId);
-
-    /** Проверка на игнор */
     if (this.hasCommitMessageIgnored(commitMessage, config?.ignoredMessagePattern)) {
       console.warn('Ignored this commit message:', commitMessage);
       process.exit(0);
     }
 
-    /** Проверка валидности commitMessage */
     if (!this.hasValidCommitMessage(commitMessage, config?.messagePattern)) {
       console.error('Error: Invalid commit message:', commitMessage);
       process.exit(1);
     }
 
-    /** Проверка есть ли в названии ветки taskId */
     if (!this.hasBranchContainTaskId(
       branchName,
       currentTaskId,
