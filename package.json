@@ -1,6 +1,6 @@
 {
   "name": "commit-msg-formatter",
-  "version": "0.0.11",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
   "keywords": [
