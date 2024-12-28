@@ -1,0 +1,43 @@
+{
+  "name": "commit-msg-formatter",
+  "version": "0.0.11",
+  "type": "module",
+  "main": "dist/index.js",
+  "keywords": [
+    "commit",
+    "message",
+    "formatter",
+    "git",
+    "conventional",
+    "commits"
+  ],
+  "author": "Gleb Fomin <gleb.fom28@gmail.com>",
+  "license": "ISC",
+  "description": "A tool to format commit messages based on specified patterns.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glebfomin28/commit-msg-formatter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/glebfomin28/commit-msg-formatter/issues"
+  },
+  "homepage": "https://github.com/glebfomin28/commit-msg-formatter#readme",
+  "scripts": {
+    "formatter": "esno src/script.ts",
+    "test": "jest"
+},
+  "bin": {
+    "commit-message-formatter": "src/script.ts"
+  },
+  "dependencies": {
+    "cosmiconfig": "^9.0.0",
+    "esno": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.2"
+  }
+}
