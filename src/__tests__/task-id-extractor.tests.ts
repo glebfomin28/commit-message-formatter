@@ -12,14 +12,14 @@ describe('commit-message-formatter/partials/extractTaskId', () => {
 
   test('should return null if branchName is empty', () => {
     expect(extractTaskId('', 'jira')).toBeNull();
-    expect(extractTaskId('features/some', 'jira')).toBeNull();
+    expect(extractTaskId('feature/some', 'jira')).toBeNull();
   });
 
   test('should return null if taskManager is empty', () => {
-    expect(extractTaskId('features/DEV-123', undefined)).toBeNull();
-    expect(extractTaskId('features/DEV-123', [])).toBeNull();
-    expect(extractTaskId('features/DEV-123', '' as TTaskManagerConfig)).toBeNull();
-    expect(extractTaskId('features/DEV-123', [null, '', 0, undefined, {}] as TTaskManagerConfig)).toBeNull();
+    expect(extractTaskId('feature/DEV-123', undefined)).toBeNull();
+    expect(extractTaskId('feature/DEV-123', [])).toBeNull();
+    expect(extractTaskId('feature/DEV-123', '' as TTaskManagerConfig)).toBeNull();
+    expect(extractTaskId('feature/DEV-123', [null, '', 0, undefined, {}] as TTaskManagerConfig)).toBeNull();
   });
 
 
