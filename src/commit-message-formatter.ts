@@ -113,7 +113,6 @@ class CommitMessageFormatter {
           messagePattern: config?.messagePattern,
       });
 
-      console.log('newMessage:', newMessage);
       writeFileSync(this.commitMessageFilePath, newMessage);
     }
 

@@ -1,8 +1,13 @@
 import { readFileSync, writeFileSync } from 'fs';
-import process from 'process';
 import { execSync } from "child_process";
-import {formatCommitMessage, extractTaskId, createRegExp} from "../partials";
 import { runCommitProcessing } from '../commit-message-formatter';
+import { formatCommitMessage, extractTaskId, createRegExp } from "../partials";
+import {
+  mockProcessExit,
+  mockProcessStdout,
+  mockProcessStderr,
+  mockConsoleLog,
+} from "jest-mock-process";
 
 jest.mock('fs', () => ({
   readFileSync: jest.fn(),
@@ -43,17 +48,33 @@ jest.mock('../config', () => ({
 }));
 
 describe('commit-message-formatter/runCommitProcessing', () => {
+  let mockExit: jest.SpyInstance;
+  let mockStdout: jest.SpyInstance;
+  let mockStderr: jest.SpyInstance;
+  let mockLog: jest.SpyInstance;
+
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(process, 'exit').mockImplementation((code) => {
-      throw new Error(`process.exit called with code ${code}`);
-    });
+    mockExit = mockProcessExit() as jest.SpyInstance;
+    mockStdout = mockProcessStdout() as jest.SpyInstance;
+    mockStderr = mockProcessStderr() as jest.SpyInstance;
+    mockLog = mockConsoleLog() as jest.SpyInstance;
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    // Mock process.argv to provide a valid file path
+    Object.defineProperty(process, 'argv', {
+      value: ['node', 'script.js', 'path/to/commit-message.txt'],
+      configurable: true,
+    });
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
+    mockExit.mockRestore();
+    mockStdout.mockRestore();
+    mockStderr.mockRestore();
+    mockLog.mockRestore();
   });
 
   test('should load config and process commit message', async () => {
@@ -62,16 +83,17 @@ describe('commit-message-formatter/runCommitProcessing', () => {
     (extractTaskId as jest.Mock).mockReturnValue('DEV-123');
     (formatCommitMessage as jest.Mock).mockReturnValue('[DEV-123] feat: some message');
 
-    await expect(runCommitProcessing()).rejects.toThrow('process.exit called with code 0');
+    await runCommitProcessing();
 
-    expect(readFileSync).toHaveBeenCalledWith(expect.any(String), 'utf-8');
+    expect(mockExit).toHaveBeenCalledWith(0);
+    expect(readFileSync).toHaveBeenCalledWith('path/to/commit-message.txt', 'utf-8');
     expect(execSync).toHaveBeenCalledWith('git rev-parse --abbrev-ref HEAD');
     expect(formatCommitMessage).toHaveBeenCalledWith({
       commitMessage: 'feat: some message',
       taskId: 'DEV-123',
       messagePattern: '[$T] $M',
     });
-    expect(writeFileSync).toHaveBeenCalledWith(expect.any(String), '[DEV-123] feat: some message');
+    expect(writeFileSync).toHaveBeenCalledWith('path/to/commit-message.txt', '[DEV-123] feat: some message');
   });
 
   test('should ignore commit message if it matches ignored pattern', async () => {
@@ -79,8 +101,9 @@ describe('commit-message-formatter/runCommitProcessing', () => {
     (execSync as jest.Mock).mockReturnValue('master');
     (createRegExp as jest.Mock).mockReturnValueOnce(/^mearge/i);
 
-    await expect(runCommitProcessing()).rejects.toThrow('process.exit called with code 0');
+    await runCommitProcessing();
 
+    expect(mockExit).toHaveBeenCalledWith(0);
     expect(console.warn).toHaveBeenCalledWith('Ignored this commit message:', 'Mearge feat: some message');
   });
 
@@ -88,8 +111,9 @@ describe('commit-message-formatter/runCommitProcessing', () => {
     (readFileSync as jest.Mock).mockReturnValue('  feat: some message');
     (execSync as jest.Mock).mockReturnValue('master');
 
-    await expect(runCommitProcessing()).rejects.toThrow('process.exit called with code 1');
+    await runCommitProcessing();
 
+    expect(mockExit).toHaveBeenCalledWith(1);
     expect(console.error).toHaveBeenCalledWith('Error: Invalid commit message:', '  feat: some message');
   });
 
@@ -98,8 +122,9 @@ describe('commit-message-formatter/runCommitProcessing', () => {
     (execSync as jest.Mock).mockReturnValue('branch-name');
     (extractTaskId as jest.Mock).mockReturnValue(null);
 
-    await expect(runCommitProcessing()).rejects.toThrow('process.exit called with code 1');
+    await runCommitProcessing();
 
+    expect(mockExit).toHaveBeenCalledWith(1);
     expect(console.error).toHaveBeenCalledWith('Error: branch name not contain task id.');
   });
 });

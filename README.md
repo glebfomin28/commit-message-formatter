@@ -99,10 +99,10 @@ module.exports = {
 
 Results:
 ```
-feat(shared): Add new feature => feat(DEV-123/shared): Add new feature
-feat!: Add new feature => feat(DEV-123)!: Add new feature
-feat(scope): Add new feature => feat(DEV-123/scope): Add new feature
-feat(scope)!: Add new feature => feat(DEV-123/scope)!: Add new feature
+feat: Add new feature => feat(DEV-123): add new feature
+feat!: Add new feature => feat(DEV-123)!: add new feature
+feat(scope): Add new feature => feat(DEV-123/scope): add new feature
+feat(scope)!: Add new feature => feat(DEV-123/scope)!: add new feature
 ```
       
 
